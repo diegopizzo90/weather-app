@@ -13,19 +13,19 @@ class CustomCardView(context: Context, attrs: AttributeSet?) : CardView(context,
         View.inflate(context, R.layout.custom_card, this)
     }
 
-    fun setCurrentCondition(currentCondition: String?) {
+    fun setCurrentCondition(currentCondition: String) {
         current_condition_value.text = currentCondition
     }
 
-    fun setTemperature(temperature: Int?) {
-        temperature_value.text = temperature?.toString()
+    fun setTemperature(temperature: Int) {
+        temperature_value.text = resources.getString(R.string.temperature_celsius, temperature.toString())
     }
 
-    fun setWindSpeed(windSpeed: Int?) {
-        wind_speed_value.text = windSpeed?.toString()
+    fun setWindSpeed(windSpeed: Int) {
+        wind_speed_value.text = resources.getString(R.string.wind_speed_meter_per_second, windSpeed.toString())
     }
 
-    fun setWindDirection(windDirection: Int?) {
-        wind_direction_value.text = windDirection?.toString()
+    fun setWindDirection(windDirection: String) {
+        wind_direction_value.text = windDirection
     }
 }

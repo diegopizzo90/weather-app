@@ -6,4 +6,6 @@
     <string name="temperature">Temperature:</string>
     <string name="wind_speed">Wind Speed:</string>
     <string name="wind_direction">Wind Direction:</string>
+    <string name="temperature_celsius">%1$s \u2109</string>
+    <string name="wind_speed_meter_per_second">%1$s mps</string>
 </resources>
