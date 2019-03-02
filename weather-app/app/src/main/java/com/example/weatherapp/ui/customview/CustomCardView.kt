@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.View
 import androidx.cardview.widget.CardView
+import com.bumptech.glide.Glide
 import com.example.weatherapp.R
 import kotlinx.android.synthetic.main.custom_card.view.*
 
@@ -19,6 +20,10 @@ class CustomCardView(context: Context, attrs: AttributeSet?) : CardView(context,
 
     fun setTemperature(temperature: Int) {
         temperature_value.text = resources.getString(R.string.temperature_celsius, temperature.toString())
+    }
+
+    fun setIcon(iconUrl: String) {
+        Glide.with(context).load(iconUrl).into(icon_value)
     }
 
     fun setWindSpeed(windSpeed: Int) {
