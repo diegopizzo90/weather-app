@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="CustomCardView">
+        <attr name="currentCondition" format="string"/>
+        <attr name="temperature" format="integer"/>
+        <attr name="icon" format="reference"/>
+        <attr name="windSpeed" format="integer"/>
+        <attr name="windDirection" format="string"/>
+    </declare-styleable>
+</resources>
