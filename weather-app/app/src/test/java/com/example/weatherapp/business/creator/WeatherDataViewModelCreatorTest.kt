@@ -4,6 +4,7 @@ import com.example.weatherapp.business.creator.WeatherDataViewModelCreator.Compa
 import com.example.weatherapp.business.creator.WeatherDataViewModelCreator.Companion.NORTH
 import com.example.weatherapp.business.creator.WeatherDataViewModelCreator.Companion.SOUTH_EAST
 import com.example.weatherapp.business.creator.WeatherDataViewModelCreator.Companion.WEST
+import com.example.weatherapp.business.creator.WeatherDataViewModelCreator.Companion.formatDateTimeToString
 import com.example.weatherapp.business.datamodel.Main
 import com.example.weatherapp.business.datamodel.Weather
 import com.example.weatherapp.business.datamodel.WeatherMain
@@ -13,14 +14,15 @@ import com.example.weatherapp.business.db.entity.WeatherEntity
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.junit.runners.JUnit4
+import org.robolectric.RobolectricTestRunner
+import org.robolectric.annotation.Config
 import org.threeten.bp.ZonedDateTime
 
-@RunWith(JUnit4::class)
+@RunWith(RobolectricTestRunner::class)
+@Config(manifest = Config.NONE)
 class WeatherDataViewModelCreatorTest {
 
     private val creator = WeatherDataViewModelCreator()
-
 
     private fun dummyDataModelFromNetwork(degrees: Double): WeatherMain {
         val weather = Weather("Sunny", "icon.png")
@@ -33,15 +35,19 @@ class WeatherDataViewModelCreatorTest {
         return WeatherEntity(1, "Sunny", "icon.png", "12.8", "24.6", degrees, dateTime)
     }
 
-    private fun dummyDataViewModel(degrees: String, isExpired: Boolean): WeatherDataViewModel {
-        return WeatherDataViewModel("Sunny", "icon.png", "12.8", "24.6", degrees, isExpired)
+    private fun dummyDataViewModel(degrees: String, isExpired: Boolean, dateTime: String?): WeatherDataViewModel {
+        return WeatherDataViewModel(
+            "Sunny", "icon.png", "12.8", "24.6", degrees, isExpired, dateTime
+        )
     }
 
     @Test
     fun createDataViewModelFromNetworkTest() {
         val dummyDataModel = dummyDataModelFromNetwork(123.8)
         val dataViewModel = creator.createDataViewModel(dummyDataModel)
-        val dummyDataViewModel = dummyDataViewModel(SOUTH_EAST, false)
+        val dummyDataViewModel = dummyDataViewModel(
+            SOUTH_EAST, false, formatDateTimeToString(ZonedDateTime.now())!!
+        )
         assertEquals(dataViewModel, dummyDataViewModel)
     }
 
@@ -52,20 +58,23 @@ class WeatherDataViewModelCreatorTest {
 
         val dummyDataModelWithValidDegrees = dummyDataModelFromNetwork(degreesValid)
         val dataViewModelValid = creator.createDataViewModel(dummyDataModelWithValidDegrees)
-        val dummyDataViewModelWithValidDegrees = dummyDataViewModel(WEST, false)
+        val dummyDataViewModelWithValidDegrees =
+            dummyDataViewModel(WEST, false, formatDateTimeToString(ZonedDateTime.now()))
         assertEquals(dataViewModelValid, dummyDataViewModelWithValidDegrees)
 
         val dummyDataModelWithNotValidDegrees = dummyDataModelFromNetwork(degreesNotValid)
         val dataViewModelNotValid = creator.createDataViewModel(dummyDataModelWithNotValidDegrees)
-        val dummyDataViewModelWithNotValidDegrees = dummyDataViewModel(ERROR_DIRECTION, false)
+        val dummyDataViewModelWithNotValidDegrees =
+            dummyDataViewModel(ERROR_DIRECTION, false, formatDateTimeToString(ZonedDateTime.now()))
         assertEquals(dataViewModelNotValid, dummyDataViewModelWithNotValidDegrees)
     }
 
     @Test
     fun createDataViewModelFromDBTest() {
-        val dummyDataModel = dummyDataModelFromDB("0", ZonedDateTime.parse("2019-03-03T10:39:37.640Z"))
+        val dummyDataModel = dummyDataModelFromDB(NORTH, ZonedDateTime.parse("2019-03-03T10:39:37.640Z"))
         val dataViewModel = creator.createDataViewModel(dummyDataModel)
-        val dummyDataViewModel = dummyDataViewModel(NORTH, true)
+        val dummyDataViewModel =
+            dummyDataViewModel(NORTH, true, formatDateTimeToString(ZonedDateTime.parse("2019-03-03T10:39:37.640Z"))!!)
         assertEquals(dataViewModel, dummyDataViewModel)
     }
 }
