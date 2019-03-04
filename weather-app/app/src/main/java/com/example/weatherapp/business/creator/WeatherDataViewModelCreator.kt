@@ -2,6 +2,11 @@ package com.example.weatherapp.business.creator
 
 import com.example.weatherapp.business.datamodel.WeatherMain
 import com.example.weatherapp.business.dataviewmodel.WeatherDataViewModel
+import com.example.weatherapp.business.db.entity.WeatherEntity
+import org.threeten.bp.Duration
+import org.threeten.bp.ZoneId
+import org.threeten.bp.ZoneOffset
+import org.threeten.bp.ZonedDateTime
 import kotlin.math.roundToInt
 
 class WeatherDataViewModelCreator {
@@ -12,21 +17,62 @@ class WeatherDataViewModelCreator {
             weatherMain.weather[0].icon,
             weatherMain.main.temp.toString(),
             weatherMain.wind.speed.toString(),
-            fromWindSpeedDegreesToWindSpeedDirection(weatherMain.wind.deg.roundToInt())
+            fromWindSpeedDegreesToWindSpeedDirection(weatherMain.wind.deg.roundToInt()),
+            false
         )
+    }
+
+    fun createDataViewModel(weatherEntity: WeatherEntity): WeatherDataViewModel {
+        return WeatherDataViewModel(
+            weatherEntity.currentCondition,
+            weatherEntity.icon,
+            weatherEntity.temperature,
+            weatherEntity.windSpeed,
+            weatherEntity.windDirection,
+            checkIfDataIsExpired(weatherEntity.timestamp)
+        )
+    }
+
+    fun createEntity(weatherDataViewModel: WeatherDataViewModel): WeatherEntity {
+        return WeatherEntity(
+            1, weatherDataViewModel.currentCondition,
+            weatherDataViewModel.icon,
+            weatherDataViewModel.temperature,
+            weatherDataViewModel.windSpeed,
+            weatherDataViewModel.windDirection,
+            ZonedDateTime.now(ZoneId.of("UTC"))
+        )
+    }
+
+    private fun checkIfDataIsExpired(dateTime: ZonedDateTime?): Boolean {
+        if (dateTime == null) return false
+        val hours = Duration.between(dateTime, ZonedDateTime.now(ZoneOffset.UTC)).toHours()
+        return (hours > 24)
     }
 
     private fun fromWindSpeedDegreesToWindSpeedDirection(degrees: Int): String {
         return when (degrees) {
-            in 0..22, in 338..360 -> "North"
-            in 23..67 -> "North-East"
-            in 68..112 -> "East"
-            in 113..157 -> "South-East"
-            in 158..202 -> "South"
-            in 203..247 -> "South-West"
-            in 248..292 -> "West"
-            in 293..337 -> "North-West"
-            else -> "Direction not valid"
+            in 0..22, in 338..360 -> NORTH
+            in 23..67 -> NORTH_EAST
+            in 68..112 -> EAST
+            in 113..157 -> SOUTH_EAST
+            in 158..202 -> SOUTH
+            in 203..247 -> SOUTH_WEST
+            in 248..292 -> WEST
+            in 293..337 -> NORTH_WEST
+            else -> ERROR_DIRECTION
         }
+    }
+
+    companion object {
+        const val NORTH = "North"
+        const val NORTH_EAST = "North-East"
+        const val EAST = "East"
+        const val SOUTH_EAST = "South-East"
+        const val SOUTH = "South"
+        const val SOUTH_WEST = "South-West"
+        const val WEST = "West"
+        const val NORTH_WEST = "North-West"
+        const val ERROR_DIRECTION = "Direction not valid"
     }
 }

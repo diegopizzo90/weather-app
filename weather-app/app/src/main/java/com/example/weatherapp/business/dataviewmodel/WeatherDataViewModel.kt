@@ -5,5 +5,6 @@ data class WeatherDataViewModel(
     val icon: String,
     val temperature: String,
     val windSpeed: String,
-    val windDirection: String
+    val windDirection: String,
+    val isExpired: Boolean?
 )
