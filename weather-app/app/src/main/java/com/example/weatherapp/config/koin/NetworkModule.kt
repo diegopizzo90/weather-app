@@ -1,6 +1,7 @@
 package com.example.weatherapp.config.koin
 
 import com.example.weatherapp.business.cache.Store
+import com.example.weatherapp.business.creator.WeatherDataViewModelCreator
 import com.example.weatherapp.business.interactor.Interactor
 import com.example.weatherapp.business.network.Service
 import com.google.gson.Gson
@@ -17,7 +18,7 @@ val networkModule = module {
     single { providesGson() }
     single { providesService(get()) }
     single { providesStore(get()) }
-    single { providesServiceInteractor(get()) }
+    single { providesServiceInteractor(get(), get()) }
 
 }
 
@@ -45,6 +46,6 @@ fun providesStore(service: Service): Store {
     return Store(service)
 }
 
-fun providesServiceInteractor(store: Store): Interactor {
-    return Interactor(store)
+fun providesServiceInteractor(store: Store, creator: WeatherDataViewModelCreator): Interactor {
+    return Interactor(store, creator)
 }

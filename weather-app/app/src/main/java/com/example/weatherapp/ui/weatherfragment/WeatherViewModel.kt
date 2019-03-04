@@ -3,7 +3,6 @@ package com.example.weatherapp.ui.weatherfragment
 import android.view.View
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.weatherapp.business.creator.WeatherDataViewModelCreator
 import com.example.weatherapp.business.dataviewmodel.WeatherDataViewModel
 import com.example.weatherapp.business.interactor.Interactor
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -11,8 +10,7 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 
 class WeatherViewModel(
-    private val interactor: Interactor,
-    private val weatherDataViewModelCreator: WeatherDataViewModelCreator
+    private val interactor: Interactor
 ) : ViewModel() {
 
     private lateinit var disposable: Disposable
@@ -27,7 +25,7 @@ class WeatherViewModel(
             .doOnSubscribe { onStart() }
             .doFinally { onEnd() }
             .subscribe(
-                { t1 -> onSuccess(weatherDataViewModelCreator.createDataViewModel(t1)) },
+                { t1 -> onSuccess(t1) },
                 { onError() })
     }
 
