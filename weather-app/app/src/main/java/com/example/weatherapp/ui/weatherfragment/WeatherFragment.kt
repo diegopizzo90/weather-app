@@ -45,15 +45,13 @@ class WeatherFragment : Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.weather_fragment_layout, container, false)
         binding.viewModel = viewModel
 
-        getLocation()
+        getLocationAndGetWeatherData(false)
         setFab()
 
         viewModel.weatherMutableLiveData.observe(this, Observer { weatherMain -> setWeatherCardData(weatherMain) })
 
         viewModel.progressBarVisibility.observe(
             this, Observer { value -> binding.weatherCard.progressBarVisibility(value) })
-
-        viewModel.errorMessage.observe(this, Observer { t -> if (t != null) showMessage(t) })
 
         return binding.root
     }
@@ -62,12 +60,15 @@ class WeatherFragment : Fragment() {
         Snackbar.make(binding.root, message, Snackbar.LENGTH_LONG).show()
     }
 
-    private fun callApi(latitude: Double, longitude: Double) {
-        viewModel.getWeatherData(latitude, longitude)
+    private fun callApi(latitude: Double, longitude: Double, isFromFab: Boolean) {
+        viewModel.getWeatherData(latitude, longitude, isFromFab)
     }
 
     private fun setFab() {
-        binding.refreshFloatingActionButton.setOnClickListener { getLocation() }
+        binding.refreshFloatingActionButton.setOnClickListener {
+            getLocationAndGetWeatherData(true)
+            viewModel.errorMessage.observe(this, Observer { t -> if (t != null) showMessage(t) })
+        }
     }
 
     private fun setWeatherCardData(weatherDataVM: WeatherDataViewModel) {
@@ -80,7 +81,7 @@ class WeatherFragment : Fragment() {
     }
 
     @SuppressLint("MissingPermission")
-    private fun getLocation() {
+    private fun getLocationAndGetWeatherData(isFromFab: Boolean) {
         val locationProvider = ReactiveLocationProvider(context)
 
         val req = LocationRequest.create()
@@ -90,7 +91,8 @@ class WeatherFragment : Fragment() {
         val locationObservable = locationProvider.getUpdatedLocation(req)
             .observeOn(AndroidSchedulers.mainThread()).firstElement()
 
-        disposable = locationObservable.subscribe { location -> callApi(location.latitude, location.longitude) }
+        disposable =
+            locationObservable.subscribe { location -> callApi(location.latitude, location.longitude, isFromFab) }
     }
 
     override fun onStop() {

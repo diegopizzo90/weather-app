@@ -24,15 +24,15 @@ class WeatherViewModel(
     val progressBarVisibility: MutableLiveData<Int> = MutableLiveData()
     val errorMessage: MutableLiveData<String> = MutableLiveData()
 
-    fun getWeatherData(latitude: Double, longitude: Double) {
+    fun getWeatherData(latitude: Double, longitude: Double, isFromFab: Boolean) {
         if (checkIfTheUserIsOnline()) {
-            getWeatherDataFromNetwork(latitude, longitude)
+            getWeatherDataFromNetwork(latitude, longitude, isFromFab)
         } else {
-            getWeatherDataFromDB()
+            getWeatherDataFromDB(isFromFab)
         }
     }
 
-    private fun getWeatherDataFromNetwork(latitude: Double, longitude: Double) {
+    private fun getWeatherDataFromNetwork(latitude: Double, longitude: Double, isFromFab: Boolean) {
         val single = interactor.getWeather(latitude, longitude)
         disposableNetwork = single.subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -40,18 +40,18 @@ class WeatherViewModel(
             .doFinally { onEnd() }
             .subscribe(
                 { weatherData -> onSuccessNetwork(weatherData) },
-                { onError() })
+                { onError(isFromFab) })
     }
 
-    private fun getWeatherDataFromDB() {
+    private fun getWeatherDataFromDB(isFromFab: Boolean) {
         val single = repository.loadWeather()
         disposableDB = single.subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe { onStart() }
             .doFinally { onEnd() }
             .subscribe(
-                { weatherData -> onSuccessDB(weatherData) },
-                { onError() })
+                { weatherData -> onSuccessDB(weatherData, isFromFab) },
+                { onError(isFromFab) })
     }
 
     private fun saveWeatherOnDB(weatherDataViewModel: WeatherDataViewModel) {
@@ -77,12 +77,14 @@ class WeatherViewModel(
         saveWeatherOnDB(weatherDataViewModel)
     }
 
-    private fun onSuccessDB(weatherDataViewModel: WeatherDataViewModel) {
-        if (weatherDataViewModel.isExpired == false) weatherMutableLiveData.value = weatherDataViewModel else onError()
+    private fun onSuccessDB(weatherDataViewModel: WeatherDataViewModel, isFromFab: Boolean) {
+        if (weatherDataViewModel.isExpired == false) weatherMutableLiveData.value = weatherDataViewModel else onError(
+            isFromFab
+        )
     }
 
-    private fun onError() {
-        errorMessage.value = "Sorry, we can't retrieve the data."
+    private fun onError(isFromFab: Boolean) {
+        if (isFromFab) errorMessage.value = "Sorry, we can't retrieve the data, you are offline!"
     }
 
     override fun onCleared() {
