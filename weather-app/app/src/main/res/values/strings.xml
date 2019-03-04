@@ -14,4 +14,5 @@
     <string name="permission_dialog">Permission Dialog</string>
     <string name="message_dialog">Sorry, but for using this app we need your location. Bye bye!</string>
     <string name="button_dialog_title">Exit!</string>
+    <string name="last_update">Last update</string>
 </resources>

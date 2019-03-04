@@ -76,6 +76,7 @@ class WeatherFragment : Fragment() {
         binding.weatherCard.setTemperature(weatherDataVM.temperature)
         binding.weatherCard.setWindSpeed(weatherDataVM.windSpeed)
         binding.weatherCard.setWindDirection(weatherDataVM.windDirection)
+        binding.lastUpdateTextView.text = weatherDataVM.lastUpdate
     }
 
     @SuppressLint("MissingPermission")
