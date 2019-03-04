@@ -4,9 +4,8 @@ import com.example.weatherapp.business.datamodel.WeatherMain
 import com.example.weatherapp.business.dataviewmodel.WeatherDataViewModel
 import com.example.weatherapp.business.db.entity.WeatherEntity
 import org.threeten.bp.Duration
-import org.threeten.bp.ZoneId
-import org.threeten.bp.ZoneOffset
 import org.threeten.bp.ZonedDateTime
+import org.threeten.bp.format.DateTimeFormatter
 import kotlin.math.roundToInt
 
 class WeatherDataViewModelCreator {
@@ -18,7 +17,8 @@ class WeatherDataViewModelCreator {
             weatherMain.main.temp.toString(),
             weatherMain.wind.speed.toString(),
             fromWindSpeedDegreesToWindSpeedDirection(weatherMain.wind.deg.roundToInt()),
-            false
+            false,
+            formatDateTimeToString(ZonedDateTime.now())
         )
     }
 
@@ -29,7 +29,8 @@ class WeatherDataViewModelCreator {
             weatherEntity.temperature,
             weatherEntity.windSpeed,
             weatherEntity.windDirection,
-            checkIfDataIsExpired(weatherEntity.timestamp)
+            checkIfDataIsExpired(weatherEntity.timestamp),
+            formatDateTimeToString(weatherEntity.timestamp)
         )
     }
 
@@ -40,13 +41,13 @@ class WeatherDataViewModelCreator {
             weatherDataViewModel.temperature,
             weatherDataViewModel.windSpeed,
             weatherDataViewModel.windDirection,
-            ZonedDateTime.now(ZoneId.of("UTC"))
+            ZonedDateTime.now()
         )
     }
 
     private fun checkIfDataIsExpired(dateTime: ZonedDateTime?): Boolean {
         if (dateTime == null) return false
-        val hours = Duration.between(dateTime, ZonedDateTime.now(ZoneOffset.UTC)).toHours()
+        val hours = Duration.between(dateTime, ZonedDateTime.now()).toHours()
         return (hours > 24)
     }
 
@@ -74,5 +75,11 @@ class WeatherDataViewModelCreator {
         const val WEST = "West"
         const val NORTH_WEST = "North-West"
         const val ERROR_DIRECTION = "Direction not valid"
+        private const val DATE_PATTERN = "EEEE, MMM dd, yyyy HH:mm"
+
+        fun formatDateTimeToString(dateTime: ZonedDateTime?): String? {
+            DateTimeFormatter.ofPattern(DATE_PATTERN)
+            return dateTime?.format(DateTimeFormatter.ofPattern(DATE_PATTERN))
+        }
     }
 }
