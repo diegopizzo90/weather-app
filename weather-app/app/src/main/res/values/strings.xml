@@ -8,4 +8,10 @@
     <string name="wind_direction">Wind Direction:</string>
     <string name="temperature_celsius">%1$s \u2109</string>
     <string name="wind_speed_meter_per_second">%1$s mps</string>
+    <string name="permission_denied_message">If you reject permission, you can not use this service. Please turn on
+        permissions at [Setting] > [Permission]
+    </string>
+    <string name="permission_dialog">Permission Dialog</string>
+    <string name="message_dialog">Sorry, but for using this app we need your location. Bye bye!</string>
+    <string name="button_dialog_title">Exit!</string>
 </resources>
