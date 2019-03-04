@@ -1,6 +1,5 @@
 package com.example.weatherapp.config.koin
 
-import com.example.weatherapp.business.cache.Store
 import com.example.weatherapp.business.creator.WeatherDataViewModelCreator
 import com.example.weatherapp.business.interactor.Interactor
 import com.example.weatherapp.business.network.Service
@@ -17,7 +16,6 @@ val networkModule = module {
     single { providesGsonConverterFactory(get()) }
     single { providesGson() }
     single { providesService(get()) }
-    single { providesStore(get()) }
     single { providesServiceInteractor(get(), get()) }
 
 }
@@ -42,10 +40,6 @@ fun providesService(retrofit: Retrofit): Service {
     return retrofit.create(Service::class.java)
 }
 
-fun providesStore(service: Service): Store {
-    return Store(service)
-}
-
-fun providesServiceInteractor(store: Store, creator: WeatherDataViewModelCreator): Interactor {
-    return Interactor(store, creator)
+fun providesServiceInteractor(service: Service, creator: WeatherDataViewModelCreator): Interactor {
+    return Interactor(service, creator)
 }
