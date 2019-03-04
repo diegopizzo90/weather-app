@@ -10,7 +10,6 @@ interface Service {
 
     companion object {
         const val ENDPOINT = "https://api.openweathermap.org"
-        const val BASE_URI_IMAGES = "http://openweathermap.org/img/w/"
         private const val API_KEY_VALUE = "fd36a65cf4eacb750e22e020459481cc"
         private const val API_KEY_NAME = "APPID"
         private const val UNITS = "units"
