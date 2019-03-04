@@ -37,13 +37,14 @@
 
         <ImageView
                 android:id="@+id/icon_value"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:contentDescription="@string/weather_icon"
                 app:layout_constraintStart_toEndOf="@+id/current_condition_value"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/current_condition_value"
-                app:layout_constraintBottom_toBottomOf="@+id/current_condition_value"/>
+                app:layout_constraintBottom_toBottomOf="@+id/current_condition_value"
+        />
 
         <TextView
                 android:id="@+id/temperature_title"

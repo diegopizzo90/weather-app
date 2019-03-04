@@ -6,6 +6,7 @@ import android.view.View
 import androidx.cardview.widget.CardView
 import com.bumptech.glide.Glide
 import com.example.weatherapp.R
+import com.example.weatherapp.ui.utils.glideOptions
 import kotlinx.android.synthetic.main.custom_card.view.*
 
 class CustomCardView(context: Context, attrs: AttributeSet?) : CardView(context, attrs) {
@@ -18,19 +19,28 @@ class CustomCardView(context: Context, attrs: AttributeSet?) : CardView(context,
         current_condition_value.text = currentCondition
     }
 
-    fun setTemperature(temperature: Int) {
-        temperature_value.text = resources.getString(R.string.temperature_celsius, temperature.toString())
+    fun setTemperature(temperature: String) {
+        temperature_value.text = resources.getString(R.string.temperature_celsius, temperature)
     }
 
     fun setIcon(iconUrl: String) {
-        Glide.with(context).load(iconUrl).into(icon_value)
+        Glide.with(context).load("$BASE_URI_IMAGES$iconUrl.png").apply(glideOptions(context))
+            .into(icon_value)
     }
 
-    fun setWindSpeed(windSpeed: Int) {
-        wind_speed_value.text = resources.getString(R.string.wind_speed_meter_per_second, windSpeed.toString())
+    fun setWindSpeed(windSpeed: String) {
+        wind_speed_value.text = resources.getString(R.string.wind_speed_meter_per_second, windSpeed)
     }
 
     fun setWindDirection(windDirection: String) {
         wind_direction_value.text = windDirection
+    }
+
+    fun progressBarVisibility(value: Int) {
+        progressBar.visibility = value
+    }
+
+    companion object {
+        private const val BASE_URI_IMAGES = "https://openweathermap.org/img/w/"
     }
 }
