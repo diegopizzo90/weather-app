@@ -28,8 +28,7 @@ class WeatherFragment : Fragment() {
 
     companion object {
         const val TAG_WEATHER_FRAGMENT = "weatherFragmentTag"
-        const val LOCATION_UPDATE_INTERVAL: Long = 5000
-        const val LOCATION_TIMEOUT_IN_SECONDS: Long = 9000
+        const val LOCATION_TIMEOUT_IN_SECONDS: Long = 5000
 
 
         fun newInstance(bundle: Bundle?): WeatherFragment {
@@ -84,12 +83,10 @@ class WeatherFragment : Fragment() {
         val locationProvider = ReactiveLocationProvider(context)
 
         val req = LocationRequest.create()
-            .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+            .setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY)
             .setExpirationDuration(TimeUnit.SECONDS.toMillis(LOCATION_TIMEOUT_IN_SECONDS))
-            .setInterval(LOCATION_UPDATE_INTERVAL)
 
         val locationObservable = locationProvider.getUpdatedLocation(req)
-            .filter { location -> location.accuracy < LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY }
             .observeOn(AndroidSchedulers.mainThread()).firstElement()
 
         disposable = locationObservable.subscribe { location -> callApi(location.latitude, location.longitude) }
