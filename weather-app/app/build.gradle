@@ -88,8 +88,22 @@ dependencies {
     implementation 'com.google.android.gms:play-services-places:16.0.0'
     implementation 'pl.charmas.android:android-reactive-location2:2.1@aar'
 
+    //Room
+    implementation "androidx.room:room-runtime:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
+    //Room and RxJava
+    implementation "androidx.room:room-rxjava2:$room_version"
+
+    //https://github.com/JakeWharton/ThreeTenABP
+    implementation 'com.jakewharton.threetenabp:threetenabp:1.1.2'
+
     //TEST
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.2-alpha01'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.2-alpha01'
+
+    androidTestImplementation 'androidx.test.ext:junit:1.1.0'
+
+    // Room test helper
+    androidTestImplementation "androidx.room:room-testing:$room_version"
 }
