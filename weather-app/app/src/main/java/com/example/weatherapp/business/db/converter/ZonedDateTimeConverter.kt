@@ -5,7 +5,7 @@ import org.threeten.bp.ZoneId
 import org.threeten.bp.ZonedDateTime
 import org.threeten.bp.format.DateTimeFormatter
 
-class TimestampConverter {
+class ZonedDateTimeConverter {
 
     companion object {
 
