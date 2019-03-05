@@ -42,7 +42,7 @@ class WeatherDataViewModelCreatorTest {
     }
 
     @Test
-    fun createDataViewModelFromNetworkTest() {
+    fun whenHasDataModelFromNetworkThenCheckIfTheDataViewModelCreatedIsCorrect() {
         val dummyDataModel = dummyDataModelFromNetwork(123.8)
         val dataViewModel = creator.createDataViewModel(dummyDataModel)
         val dummyDataViewModel = dummyDataViewModel(
@@ -70,7 +70,7 @@ class WeatherDataViewModelCreatorTest {
     }
 
     @Test
-    fun createDataViewModelFromDBTest() {
+    fun whenHasDataModelFromDbThenCheckIfTheDataViewModelCreatedIsCorrect() {
         val dummyDataModel = dummyDataModelFromDB(NORTH, ZonedDateTime.parse("2019-03-03T10:39:37.640Z"))
         val dataViewModel = creator.createDataViewModel(dummyDataModel)
         val dummyDataViewModel =

@@ -36,7 +36,7 @@ class DbTest {
 
     @Test
     @Throws(Exception::class)
-    fun saveWeatherDataAndLoadWeatherDataTest() {
+    fun whenSaveWeatherEntityThenLoadThisEntityAndCheckIfIsSavedSuccess() {
         val weatherEntity =
             WeatherEntity(
                 1, "Sunny", "icon", "12", "12", "11",
