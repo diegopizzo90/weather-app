@@ -27,8 +27,6 @@ class WeatherFragment : Fragment() {
 
     companion object {
         const val TAG_WEATHER_FRAGMENT = "weatherFragmentTag"
-        const val LOCATION_TIMEOUT_IN_SECONDS: Long = 5000
-
 
         fun newInstance(bundle: Bundle?): WeatherFragment {
             val weatherFragment = WeatherFragment()
