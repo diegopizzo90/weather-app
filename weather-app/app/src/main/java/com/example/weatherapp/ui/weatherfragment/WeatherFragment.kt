@@ -17,7 +17,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import org.koin.android.viewmodel.ext.android.viewModel
 import pl.charmas.android.reactivelocation2.ReactiveLocationProvider
-import java.util.concurrent.TimeUnit
 
 
 class WeatherFragment : Fragment() {
@@ -48,7 +47,9 @@ class WeatherFragment : Fragment() {
         getLocationAndGetWeatherData(false)
         setFab()
 
-        viewModel.weatherMutableLiveData.observe(this, Observer { weatherMain -> setWeatherCardData(weatherMain) })
+        viewModel.weatherMutableLiveData.observe(
+            this,
+            Observer { weatherDataViewModel -> setWeatherCardData(weatherDataViewModel) })
 
         viewModel.progressBarVisibility.observe(
             this, Observer { value -> binding.weatherCard.progressBarVisibility(value) })
@@ -86,7 +87,6 @@ class WeatherFragment : Fragment() {
 
         val req = LocationRequest.create()
             .setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY)
-            .setExpirationDuration(TimeUnit.SECONDS.toMillis(LOCATION_TIMEOUT_IN_SECONDS))
 
         val locationObservable = locationProvider.getUpdatedLocation(req)
             .observeOn(AndroidSchedulers.mainThread()).firstElement()
